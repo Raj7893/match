@@ -1,0 +1,201 @@
+:root {
+    --primary: #4CAF50;
+    --primary-dark: #388E3C;
+    --bg: #f4f4f9;
+    --text: #333;
+    --border: #ccc;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2 { text-align: center; margin-top: 40px;}
+
+.view-only-banner {
+    background-color: #ff9800;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.controls, .share-section, .match-recorder {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.match-recorder.active-play {
+    border: 2px solid #2196F3;
+    background-color: #e3f2fd;
+}
+
+input[type="text"], input[type="number"], select {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    min-width: 120px;
+    flex: 1;
+}
+
+button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+button:hover { background-color: var(--primary-dark); }
+button.reset-btn { background-color: #e60000; }
+button.reset-btn:hover { background-color: #c30000; }
+button.play-btn { background-color: #2196F3; }
+button.play-btn:hover { background-color: #0b7dda; }
+
+.player-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+.player-list li {
+    background: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.delete-btn {
+    background: #ff4c4c;
+    color: white;
+    border: none;
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.delete-btn:hover { background: #e60000; }
+
+/* Tabs Layout */
+.tabs { display: flex; gap: 5px; margin-bottom: 20px; justify-content: center; }
+.tab-btn { background: #e0e0e0; color: #333; }
+.tab-btn.active { background: var(--primary); color: white; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Tables Layouts */
+.results-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+}
+.leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+.leaderboard th, .leaderboard td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+.leaderboard th { background-color: #eee; }
+.vs { color: #888; font-size: 13px; font-weight: bold;}
+
+/* Dual-Side Bracket System UI columns */
+.bracket-tree-wrapper {
+    display: flex;
+    gap: 30px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 20px 10px;
+    background: #ebedf0;
+    border-radius: 8px;
+    min-height: 420px;
+}
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 15px;
+    min-width: 220px;
+}
+.round-title {
+    text-align: center;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+    font-weight: bold;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+}
+.bracket-box {
+    background: white;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    gap: 2px;
+}
+.team-slot {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    background: #f9f9f9;
+    font-weight: 500;
+    min-height: 20px;
+}
+.admin-mode-active .team-slot {
+    cursor: pointer;
+}
+.admin-mode-active .team-slot:hover {
+    background: #bee3f8;
+}
+.team-slot.winner-slot {
+    background: #c6f6d5 !important;
+    color: #22543d;
+    font-weight: bold;
+}
+.seed-number {
+    font-size: 11px;
+    background: #e2e8f0;
+    color: #4a5568;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-right: 6px;
+}
