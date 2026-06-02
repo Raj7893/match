@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Manager Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="viewOnlyNotice" class="view-only-banner" style="display: none;">
+        👀 You are viewing this tournament in <strong>View-Only Mode</strong>.
+    </div>
+
+    <h1>Tournament Manager Pro</h1>
+
+    <div class="controls admin-only">
+        <input type="text" id="playerName" placeholder="Enter team/player name..." onkeypress="handleKeyPress(event)">
+        <button onclick="addPlayer()">Add Team</button>
+    </div>
+    <ul class="player-list" id="playerList"></ul>
+
+    <div class="share-section">
+        <button onclick="generateShareLink()" class="admin-only">Generate Shareable Link</button>
+        <button onclick="resetTournament()" class="reset-btn admin-only">Reset Tournament</button>
+        <input type="text" id="shareLink" readonly placeholder="Link will appear here..." onclick="this.select()">
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('qualifying', this)">Qualifying Matches</button>
+        <button class="tab-btn" onclick="switchTab('skills-tab', this)">Skills Challenge</button>
+        <button class="tab-btn" onclick="switchTab('elimination', this)">Elimination Bracket</button>
+    </div>
+
+    <div id="qualifying" class="tab-content active">
+        
+        <h2 class="admin-only">Schedule Future Games</h2>
+        <div class="match-recorder admin-only">
+            <select id="schedTeam1"><option value="">Select Team 1</option></select>
+            <span class="vs">VS</span>
+            <select id="schedTeam2"><option value="">Select Team 2</option></select>
+            <button onclick="addUpcomingMatch()">Add to Schedule</button>
+            
+            <div style="width: 100%; border-top: 1px dashed #ccc; margin: 10px 0; padding-top: 10px; display: flex; justify-content: center; align-items: center; gap: 10px;">
+                <label>Target matches per team: <input type="number" id="matchesPerTeam" value="3" min="1" max="10" style="width: 50px; padding: 5px;"></label>
+                <button onclick="autoGenerateSchedule()" style="background-color: #2196F3;">Auto-Generate Balanced Schedule</button>
+            </div>
+        </div>
+
+        <h2>Future Games (Upcoming Matches)</h2>
+        <table class="leaderboard">
+            <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Matchup</th>
+                    <th class="admin-only">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="upcomingMatchesList"></tbody>
+        </table>
+
+        <h2 class="admin-only" id="recorderHeading">Record Qualifying Match</h2>
+        <div class="match-recorder admin-only" id="recorderBox">
+            <select id="qTeam1"><option value="">Select Team 1</option></select>
+            <span class="vs">VS</span>
+            <select id="qTeam2"><option value="">Select Team 2</option></select>
+            
+            <div class="results-inputs">
+                <label>Match Winner: 
+                    <select id="qWinner">
+                        <option value="team1">Team 1</option>
+                        <option value="team2">Team 2</option>
+                        <option value="tie">Tie</option>
+                    </select>
+                </label>
+                <label>Autonomous Winner: 
+                    <select id="qAuto">
+                        <option value="team1">Team 1</option>
+                        <option value="team2">Team 2</option>
+                        <option value="tie">Tie (0 pts)</option>
+                    </select>
+                </label>
+                <button onclick="recordQualifyingMatch()">Save Match Result</button>
+                <button onclick="cancelActiveMatch()" id="cancelMatchBtn" style="background-color: #888; display: none;">Cancel</button>
+            </div>
+        </div>
+
+        <h2>Qualifying Leaderboard</h2>
+        <table class="leaderboard">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th>Matches</th>
+                    <th>Total WP</th>
+                    <th>Avg WP</th>
+                    <th>Total AP</th>
+                    <th>Avg AP</th>
+                </tr>
+            </thead>
+            <tbody id="qualLeaderboard"></tbody>
+        </table>
+
+        <h2>Match History</h2>
+        <table class="leaderboard">
+            <thead>
+                <tr>
+                    <th>Match</th>
+                    <th>Matchup</th>
+                    <th>Match Winner</th>
+                    <th>Auto Winner</th>
+                    <th class="admin-only">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="matchHistoryList"></tbody>
+        </table>
+    </div>
+
+    <div id="skills-tab" class="tab-content">
+        <h2>Skills Challenge Entry</h2>
+        <div class="match-recorder admin-only">
+            <select id="skillsTeam"><option value="">Select Team</option></select>
+            <input type="number" id="autoSkillsScore" placeholder="Highest Auto Skills" min="0">
+            <input type="number" id="driverSkillsScore" placeholder="Highest Driver Skills" min="0">
+            <button onclick="recordSkillsScore()" style="background-color: #ff9800; font-weight: bold;">Log Skills Run</button>
+        </div>
+
+        <h2>Skills Challenge Leaderboard</h2>
+        <p style="text-align: center; color: #666; margin-top: -10px; margin-bottom: 20px;">Ranked by Total Score (Auto + Driver). Tiebreaker: Highest individual Autonomous run.</p>
+        <table class="leaderboard">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th>Highest Autonomous Run</th>
+                    <th>Highest Driver Run</th>
+                    <th>Total Skills Score</th>
+                </tr>
+            </thead>
+            <tbody id="skillsLeaderboard"></tbody>
+        </table>
+    </div>
+
+    <div id="elimination" class="tab-content">
+        <h2>Symmetrical Elimination Bracket Tree</h2>
+        
+        <div class="controls admin-only" style="margin-bottom: 20px;">
+            <button onclick="generateEliminationBracket()" style="background-color: #9c27b0; font-weight: bold; padding: 12px 25px;">Freeze Standings & Create Bracket (All Teams)</button>
+        </div>
+
+        <div class="bracket-tree-wrapper" id="bracketTreeContainer"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
